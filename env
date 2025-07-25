@@ -1,27 +1,26 @@
-# Telegram Bot
+# Telegram
 TELEGRAM_BOT_TOKEN=8425876430:AAF5ROKLgMHfB5VHAItDsYv6DsJQLGjHPv4
 
 # Google Sheets
-GSHEETS_CREDENTIALS=./google-credentials.json
+GSHEETS_CREDENTIALS=
 
 # MinIO
 MINIO_ENDPOINT=http://minio:9000
 MINIO_ACCESS_KEY=minio
 MINIO_SECRET_KEY=minio123
 
-# Chatterbox TTS
+# TTS + Gemini API Integration
 CHATTERBOX_TTS_URL=http://chatterbox-tts:5000/api/v1/synthesize
-
-# LLM Endpoint
-LLM_API_URL=http://llama-llm:8000/infer
+GEMINI_API_URL=http://gemini:8000/infer
+GEMINI_API_KEY=
 
 # FreeSWITCH
 FREESWITCH_API=http://freeswitch:8080/api/originate
 
-# Lead Scripts (can be loaded dynamically)
+# Scripts
 SCRIPT_WARM=Hi there! Thanks for reaching out. I’d love to help you with your sales questions.
 SCRIPT_REFERRAL=Thanks for the referral! We’d be happy to help your friend or colleague.
 SCRIPT_GROWTH=You're part of our growth journey! Let’s talk about how we can grow together.
 
-# Admin Notifier
-ADMIN_TELEGRAM_CHAT_ID=123456789
+# Admin Alerts
+ADMIN_TELEGRAM_CHAT_ID=
