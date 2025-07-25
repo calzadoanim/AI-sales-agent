@@ -1,5 +1,5 @@
 # Telegram Bot
-TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+TELEGRAM_BOT_TOKEN=8425876430:AAF5ROKLgMHfB5VHAItDsYv6DsJQLGjHPv4
 
 # Google Sheets
 GSHEETS_CREDENTIALS=./google-credentials.json
