@@ -1,8 +1,9 @@
 version: '3.8'
 
 services:
+  # n8n service (automation platform)
   n8n:
-    image: n8nio/n8n:latest
+    build: .
     container_name: n8n
     restart: always
     environment:
@@ -14,7 +15,7 @@ services:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
       - CHATTERBOX_TTS_URL=${CHATTERBOX_TTS_URL}
-      - LLM_API_URL=${LLM_API_URL}
+      - GEMINI_API_URL=${GEMINI_API_URL}
       - FREESWITCH_API=${FREESWITCH_API}
       - SCRIPT_WARM=${SCRIPT_WARM}
       - SCRIPT_REFERRAL=${SCRIPT_REFERRAL}
@@ -24,7 +25,10 @@ services:
       - "5678:5678"
     volumes:
       - ./n8n_workflows:/home/node/.n8n
+      - ./minio_data:/data
+      - ./tts_audio:/audio
 
+  # Chatterbox TTS service (Text-to-Speech)
   chatterbox-tts:
     image: custom/chatterbox-tts:latest
     container_name: chatterbox-tts
@@ -36,6 +40,7 @@ services:
     volumes:
       - ./tts_audio:/audio
 
+  # FreeSWITCH service (for voice calls)
   freeswitch:
     image: voxbox/freeswitch:latest
     container_name: freeswitch
@@ -44,6 +49,7 @@ services:
       - "5060:5060/udp"
       - "16384-16482:16384-16482/udp"
 
+  # MinIO service (object storage)
   minio:
     image: minio/minio:latest
     container_name: minio
@@ -56,13 +62,14 @@ services:
     volumes:
       - ./minio_data:/data
 
-  llama-llm:
-    image: local/llama3:latest
-    container_name: llama-llm
+  # Gemini service (conversation handler)
+  gemini:
+    image: custom/gemini:latest
+    container_name: gemini
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
     ports:
       - "8000:8000"
-    environment:
-      - LLM_MODEL_PATH=/models/llama3
     volumes:
-      - ./llama_models:/models
+      - ./gemini_models:/models
       
