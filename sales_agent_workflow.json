@@ -1,1 +1,95 @@
-{}
+{
+  "name": "AI Sales Booking Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": ["message"]
+      },
+      "id": "telegramTrigger",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [100, 100],
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "My Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// Classify message\nconst text = $json.message.text.toLowerCase();\nlet category = 'warm';\nif (text.includes('referral')) category = 'referral';\nelse if (text.includes('growth')) category = 'growth';\nreturn [{ json: { ...$json.message, category } }];"
+      },
+      "id": "classifier",
+      "name": "Classify Lead",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [300, 100]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "script",
+              "value": "{{ $json.category === 'referral' ? $env.SCRIPT_REFERRAL : $json.category === 'growth' ? $env.SCRIPT_GROWTH : $env.SCRIPT_WARM }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "scriptSet",
+      "name": "Set Script",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [500, 100]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$env.CHATTERBOX_TTS_URL}}",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "{\n  \"text\": {{$json.script}},\n  \"voice\": \"custom\"\n}"
+      },
+      "id": "tts",
+      "name": "Generate Audio",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [700, 100]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$env.FREESWITCH_API}}",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "{\n  \"phoneNumber\": {{$json.contact.phone_number}},\n  \"audioUrl\": {{$json.audioUrl || $json.body.audio_url}}\n}"
+      },
+      "id": "call",
+      "name": "Make Call",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [900, 100]
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [["Classify Lead"]]
+    },
+    "Classify Lead": {
+      "main": [["Set Script"]]
+    },
+    "Set Script": {
+      "main": [["Generate Audio"]]
+    },
+    "Generate Audio": {
+      "main": [["Make Call"]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v2"
+  },
+  "versionId": "1.0.0"
+}
