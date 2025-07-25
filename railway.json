@@ -1,0 +1,25 @@
+{
+  "name": "AI Sales Booking Agent",
+  "services": [
+    {
+      "name": "ai-sales-agent",
+      "source": {
+        "type": "docker"
+      },
+      "envs": [
+        { "key": "TELEGRAM_BOT_TOKEN", "value": "8425876430:AAF5ROKLgMHfB5VHAItDsYv6DsJQLGjHPv4" },
+        { "key": "GSHEETS_CREDENTIALS", "value": "" },
+        { "key": "MINIO_ENDPOINT", "value": "http://minio:9000" },
+        { "key": "MINIO_ACCESS_KEY", "value": "minio" },
+        { "key": "MINIO_SECRET_KEY", "value": "minio123" },
+        { "key": "CHATTERBOX_TTS_URL", "value": "http://chatterbox-tts:5000/api/v1/synthesize" },
+        { "key": "LLM_API_URL", "value": "http://llama-llm:8000/infer" },
+        { "key": "FREESWITCH_API", "value": "http://freeswitch:8080/api/originate" },
+        { "key": "SCRIPT_WARM", "value": "" },
+        { "key": "SCRIPT_REFERRAL", "value": "" },
+        { "key": "SCRIPT_GROWTH", "value": "" },
+        { "key": "ADMIN_TELEGRAM_CHAT_ID", "value": "" }
+      ]
+    }
+  ]
+}
