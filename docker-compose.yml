@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  n8n:
+    image: n8nio/n8n:1.103.2
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_WEBHOOK_URL=http://localhost:5678
+    volumes:
+      - ./n8n_workflows:/home/node/.n8n
+
+  chatterbox-tts:
+    build: ./services/chatterbox_tts
+    ports:
+      - "5000:5000"
+
+  llama-llm:
+    build: ./services/llm
+    ports:
+      - "8000:8000"
+
+  freeswitch:
+    image: voxbox/freeswitch:latest
+    ports:
+      - "8021:8021"
+      - "5060:5060/udp"
+      - "16384-16482:16384-16482/udp"
+
+  minio:
+    image: minio/minio:latest
+    command: server /data
+    ports:
+      - "9000:9000"
+    environment:
+      - MINIO_ROOT_USER=minio
+      - MINIO_ROOT_PASSWORD=minio123
