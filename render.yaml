@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: ai-sales-agent
+    env: docker
+    plan: free
+    repo: https://github.com/calzadoanim/ai-sales-booking-agent
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        sync: True
+      - key: GSHEETS_CREDENTIALS
+        sync: 
+      - key: MINIO_ACCESS_KEY
+        value: minio
+      - key: MINIO_SECRET_KEY
+        value: minio123
+        
